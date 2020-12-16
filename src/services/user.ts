@@ -27,7 +27,7 @@ export const register = (userName: string, password: string) => request({
   }
 })
 
-export const login = (user: User) => request({
+export const logins = (user: User) => request({
   method: 'POST',
   url: 'user/login',
   data: qs.stringify(user)
