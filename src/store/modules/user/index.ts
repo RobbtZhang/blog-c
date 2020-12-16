@@ -2,7 +2,7 @@ import { Module } from 'vuex'
 import router from '../../../router'
 import RootStateTypes from '../../interface'
 import UserState from './interface'
-import { login, getUserInfo } from '@/services/user'
+import { logins, getUserInfo } from '@/services/user'
 import message from 'ant-design-vue/lib/message'
 import 'ant-design-vue/lib/message/style/css'
 message.config({
@@ -47,7 +47,7 @@ const userState: Module<UserState, RootStateTypes> = {
   },
   actions: {
     async login ({ commit }, payload) {
-      const { data } = await login(payload)
+      const { data } = await logins(payload)
       if (data.errno === 0) {
         message.success('登录成功')
         commit('changeLogin', true)
