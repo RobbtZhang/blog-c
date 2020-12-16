@@ -14,7 +14,7 @@
               <a-upload
                 v-model:fileList="fileList"
                 list-type="picture-card"
-                action="http://localhost:3000/api/utils/upload"
+                action="http://127.0.0.1:3000/api/utils/upload"
                 class="avatar-uploader"
                 :withCredentials="true"
                 :show-upload-list="false"
@@ -225,7 +225,7 @@ export default defineComponent({
             }
           })
         } else if (info.file.response.errno === 0) {
-          form.avatar = 'http://localhost:3000' + info.file.response.data.url
+          form.avatar = 'http://127.0.0.1:3000' + info.file.response.data.url
           // console.log(form.avatar)
           loading.value = false
         }

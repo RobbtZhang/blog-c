@@ -33,7 +33,7 @@
       <div class="update-image-wrapper">
         <div class="update-image">
           <a-upload
-            action="http://localhost:3000/api/utils/upload"
+            action="http://127.0.0.1:3000/api/utils/upload"
             :withCredentials="true"
             list-type="picture-card"
             :file-list="fileList"
@@ -145,7 +145,7 @@ export default defineComponent({
               }
             })
           } else if (info.file.response.errno === 0) {
-            fileList.value[fileList.value.length - 1].url = 'http://localhost:3000' + info.file.response.data.url
+            fileList.value[fileList.value.length - 1].url = 'http://127.0.0.1:3000' + info.file.response.data.url
           }
         }
         if (info.file.status === 'error') {
