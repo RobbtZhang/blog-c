@@ -7,7 +7,7 @@ import 'ant-design-vue/lib/message/style'
 const request = axios.create({
   // 配置选项
   // baseURL
-  baseURL: 'http://localhost:3000/api/',
+  baseURL: 'http://127.0.0.1:3000/api/',
   withCredentials: true // 允许携带cookie
   // timeout
 })
