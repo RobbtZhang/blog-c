@@ -1,6 +1,6 @@
 <template>
-  <div class="home">
-    <div v-if="listData.length > 0" class="home-left">
+  <div class="me">
+    <div v-if="listData.length > 0" class="me-left">
       <a-list item-layout="horizontal"
         :data-source="listData"
         :loading="loading"
@@ -26,17 +26,13 @@
             </template>
             <a-list-item-meta>
               <template #title>
-                <router-link :to="`/profile/${item.user.id}`">
-                  {{ item.user.userName }}
-                </router-link>
+                {{ item.user.userName }}
               </template>
               <template #description>
                 {{ time(item.createdAt) }}
               </template>
               <template #avatar>
-                <router-link :to="`/profile/${item.user.id}`">
-                  <a-avatar shape="square" :src="item.user.avatar" />
-                </router-link>
+                <a-avatar shape="square" :src="item.user.avatar" />
               </template>
             </a-list-item-meta>
             <div class="blog-content">
@@ -45,7 +41,9 @@
               <a-list :grid="{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 3, xl: 4, xxl: 6 }" :data-source="item.imgs" v-if="item.imgs.length > 0">
                 <template #renderItem="{ item }">
                   <a-list-item>
-                    <div class="blog-img" :style="{backgroundImage: 'url( '+ item +')', backgroundSize:'cover'}" @click="handlePreview(item)" alt="">
+                    <div class="blog-img"
+                      :style="{backgroundImage: `url(${item})`, backgroundSize: 'cover'}"
+                      @click="handlePreview(item)">
                     </div>
                   </a-list-item>
                 </template>
@@ -57,17 +55,17 @@
     </div>
     <div class="no-data" v-else>
       <Icon type="empty" :style="{'font-size': '200px', color: '#1890ff'}" />
-      <p class="no-data-info">数据加载中</p>
+      <p class="no-data-info">还没有文章...</p>
+      <div class="no-data-button">
+        <a-button type="primary">
+          <router-link to="/createBlog">
+            去创建
+          </router-link>
+        </a-button>
+      </div>
     </div>
     <div class="profile-right">
-      <card-info v-if="isLogin" :userName="userName" :sign="sign" :avatar="avatar" :userId="userId" :myId="userId" :fansCount="fansCount"
-       :followerCount="followerCount" />
-      <router-link v-else to='/login'>
-        <a-card hoverable style="width: 300px">
-          <a-card-meta title="欢迎" description="去登陆发现更多精彩">
-          </a-card-meta>
-        </a-card>
-      </router-link>
+      <card-info :userName="userName" :sign="sign" :avatar="avatar" :userId="userId" :myId="userId" :fansCount="fansCount" :followerCount="followerCount" />
     </div>
     <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
       <img alt="example" style="width: 100%" :src="bigImg" />
@@ -77,16 +75,14 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from 'vue'
-import { homeBlog } from '../services/blog'
-import { time } from '../utils/utils'
 import { useStore } from '../store/index'
+import { profile, getFans, getFollower } from '../services/profile'
+import { time } from '../utils/utils'
 import { StarOutlined, LikeOutlined, MessageOutlined, SettingOutlined, EllipsisOutlined, EditOutlined } from '@ant-design/icons-vue'
 import AList from 'ant-design-vue/lib/list'
 import AListItem from 'ant-design-vue/lib/list/Item'
 import AAvatar from 'ant-design-vue/lib/avatar'
 import 'ant-design-vue/lib/avatar/style/css'
-import ACard from 'ant-design-vue/lib/card'
-import 'ant-design-vue/lib/card/style/css'
 import 'ant-design-vue/lib/spin/style/css'
 import 'ant-design-vue/lib/list/style/css'
 import AModal from 'ant-design-vue/lib/modal'
@@ -96,10 +92,15 @@ import AButton from 'ant-design-vue/lib/button'
 import 'ant-design-vue/lib/button/style/css'
 import AEmpty from 'ant-design-vue/lib/empty'
 import 'ant-design-vue/lib/empty/style/css'
-import Icon from '../components/icon/Icon.vue'
 import CardInfo from '@/components/card/CardInfo.vue'
+import Icon from '@/components/icon/Icon.vue'
+interface UserData {
+  userName: any;
+  sign: any;
+  avatar: any;
+}
 export default defineComponent({
-  name: 'home',
+  name: 'me',
   components: {
     AButton,
     StarOutlined,
@@ -113,21 +114,14 @@ export default defineComponent({
     ASpin,
     AListItemMeta: AList.Item.Meta,
     AAvatar,
-    ACard,
-    ACardMeta: ACard.Meta,
     AEmpty,
-    Icon,
     AModal,
-    CardInfo
+    CardInfo,
+    Icon
   },
   setup () {
     const store = useStore()
     const listData = ref([])
-    const isLogin = computed(() => store.state.userState.isLogin)
-    const userName = computed(() => store.state.userState.userInfo.userName)
-    const sign = computed(() => store.state.userState.userInfo.sign)
-    const userId = computed(() => store.state.userState.userInfo.id)
-    const avatar = computed(() => store.state.userState.userInfo.avatar)
     const actions = ref([
       { type: 'StarOutlined', text: '156' },
       { type: 'LikeOutlined', text: '156' },
@@ -138,14 +132,17 @@ export default defineComponent({
     const loading = ref(false)
     const pageIndex = ref(1)
     const pageSize = ref(5)
+    const sign = computed(() => store.state.userState.userInfo.sign)
+    const userName = computed(() => store.state.userState.userInfo.userName)
+    const avatar = computed(() => store.state.userState.userInfo.avatar)
+    const userId: any = computed(() => store.state.userState.userInfo.id)
     const previewVisible = ref(false)
     const bigImg = ref('')
     const fansCount = computed(() => store.state.userState.userInfo.fansCount)
     const followerCount = computed(() => store.state.userState.userInfo.followerCount)
-    onMounted(async () => {
-      // fansCount.value =
-      // followerCount.value =
-      const { data } = await homeBlog({
+    const getData = async () => {
+      const { data } = await profile({
+        userId: userId.value,
         pageIndex: pageIndex.value,
         pageSize: pageSize.value
       })
@@ -153,6 +150,20 @@ export default defineComponent({
         listData.value = data.data.blogList
         count.value = data.data.count
       }
+    }
+    // const getFansList = async () => {
+    //   if (userId.value) {
+    //     const { data } = await getFans(userId.value)
+    //     if (data.errno === 0) {
+    //       fansCount.value = data.data.count
+    //       store.commit('userState/setFansList', data.data.userList)
+    //       store.commit('userState/setFansListCount', data.data.count)
+    //     }
+    //   }
+    // }
+    onMounted(() => {
+      getData()
+      // getFansList()
     })
     const handlePreview = (item: string) => {
       bigImg.value = item
@@ -164,7 +175,8 @@ export default defineComponent({
     const onLoadMore = async () => {
       loadingMore.value = true
       pageIndex.value++
-      const { data } = await homeBlog({
+      const { data } = await profile({
+        userId: userId.value,
         pageIndex: pageIndex.value,
         pageSize: pageSize.value
       })
@@ -185,11 +197,11 @@ export default defineComponent({
       handleCancel,
       handlePreview,
       bigImg,
-      isLogin,
+      userId,
+      getData,
       userName,
       avatar,
       sign,
-      userId,
       fansCount,
       followerCount
     }
@@ -207,7 +219,7 @@ export default defineComponent({
   justify-content: flex-start;
   align-items: flex-start;
 }
-.home{
+.me{
   width: 80%;
   // background-color: red;
   margin: 0 auto;
@@ -221,8 +233,15 @@ export default defineComponent({
     .no-data-info {
       text-align: center;
     }
+    .no-data-button {
+      margin-top: 30px;
+      text-align: center;
+      .ant-btn-primary {
+        margin: 0px;
+      }
+    }
   }
-  .home-left {
+  .me-left {
     width: 80%;
     padding-left: 30px;
     .blog-content {
