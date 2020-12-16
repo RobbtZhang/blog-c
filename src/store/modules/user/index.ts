@@ -11,7 +11,7 @@ message.config({
 })
 
 const userState: Module<UserState, RootStateTypes> = {
-  namespaced: process.env.NODE_ENV !== 'production',
+  // namespaced: process.env.NODE_ENV !== 'production',
   state: {
     userInfo: JSON.parse(localStorage.getItem('userInfo') || '{}'),
     userCookie: '',
