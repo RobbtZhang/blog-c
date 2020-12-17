@@ -8,6 +8,7 @@ const request = axios.create({
   // 配置选项
   // baseURL
   baseURL: '/api/',
+  // baseURL: 'http://localhost:3000/api/',
   withCredentials: true // 允许携带cookie
   // timeout
 })
@@ -30,7 +31,7 @@ request.interceptors.response.use(response => {
   } else if (data.errno === 10005) {
     if (localStorage.getItem('isLogin')) {
       message.error('登录已过期')
-      store.commit('userState/changeLogin', false)
+      store.commit('changeLogin', false)
       localStorage.removeItem('isLogin')
     } else {
       message.error('您尚未登录')

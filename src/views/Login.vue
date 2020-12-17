@@ -79,13 +79,13 @@ export default defineComponent({
         const res = await validate()
         if (!res.outOfDate) {
           const { username: userName, password } = toRaw(ruleForm)
-          store.dispatch('userState/login', { userName, password })
+          store.dispatch('login', { userName, password })
           router.beforeEach((to, from, next) => {
             if (to.name === 'profile' && to.params.id === 'undefined') {
               next({
                 name: 'profile',
                 params: {
-                  id: store.state.userState.userInfo.id as any
+                  id: store.state.userInfo.id as any
                 },
                 replace: true
               })

@@ -27,7 +27,7 @@ export default defineComponent({
     const fansList = ref([])
     const fansCount = ref(0)
     const userId: any = computed(() => router.params.id)
-    const meId: any = computed(() => store.state.userState.userInfo.id)
+    const meId: any = computed(() => store.state.userInfo.id)
     onMounted(async () => {
       // if (!(fansList.value.length > 0)) {
       const { data } = await getFans(userId.value)

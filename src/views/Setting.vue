@@ -127,10 +127,10 @@ export default defineComponent({
     const fileList = ref<any>([])
     // let updateAva = ''
     const form = reactive<UserInfo>({
-      sign: store.state.userState.userInfo.sign,
-      city: store.state.userState.userInfo.city,
-      avatar: store.state.userState.userInfo.avatar,
-      gender: store.state.userState.userInfo.gender
+      sign: store.state.userInfo.sign,
+      city: store.state.userInfo.city,
+      avatar: store.state.userInfo.avatar,
+      gender: store.state.userInfo.gender
     })
     const pasForm = reactive({
       password: '',
@@ -172,8 +172,8 @@ export default defineComponent({
         message.success('修改成功，请重新登录')
         const res = await logout()
         if (res.data.errno === 0) {
-          store.commit('userState/setUserInfo', {})
-          store.commit('userState/changeLogin', false)
+          store.commit('setUserInfo', {})
+          store.commit('changeLogin', false)
           message.success('退出成功')
           router.push('/')
         }
@@ -264,7 +264,7 @@ export default defineComponent({
         if (res.data.errno === 0) {
           message.success('修改成功')
           const userInfo = await getUserInfo()
-          store.commit('userState/setUserInfo', userInfo.data.data)
+          store.commit('setUserInfo', userInfo.data.data)
         }
       }).catch(err => {
         console.log('error', err)

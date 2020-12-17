@@ -37,7 +37,7 @@ export default defineComponent({
     const router = useRoute()
     const store = useStore()
     const userId: any = computed(() => router.params.id)
-    const meId: any = computed(() => store.state.userState.userInfo.id)
+    const meId: any = computed(() => store.state.userInfo.id)
     onMounted(async () => {
       const { data } = await getFollower(userId.value)
       if (data.errno === 0) {

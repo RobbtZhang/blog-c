@@ -4,7 +4,7 @@ module.exports = {
   //   config.plugin('webpack-bundle-analyzer').use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
   // },
   devServer: {
-    disableHostCheck: true
+    // disableHostCheck: true
   },
   css: {
     loaderOptions: {

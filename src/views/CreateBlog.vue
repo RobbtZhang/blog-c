@@ -109,7 +109,7 @@ export default defineComponent({
     const previewVisible = ref(false)
     const previewImage = ref('')
     const fileList = ref<any[]>([])
-    const userId: any = computed(() => store.state.userState.userInfo.id)
+    const userId: any = computed(() => store.state.userInfo.id)
     const followList = ref([])
     const followCount = ref(0)
     const values = ref<any>([])
@@ -197,7 +197,7 @@ export default defineComponent({
           router.push({
             name: 'profile',
             params: {
-              id: store.state.userState.userInfo.id as any
+              id: store.state.userInfo.id as any
             }
           })
         }

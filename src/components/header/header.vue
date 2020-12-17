@@ -121,15 +121,15 @@ export default defineComponent({
     const store = useStore()
     const showHeader = ['login', 'register', undefined, 'not-found', 'error']
     const pathName = computed(() => route.name)
-    const isLogin = computed(() => store.state.userState.isLogin)
-    const userName = computed(() => store.state.userState.userInfo.userName)
-    const avatar = computed(() => store.state.userState.userInfo.avatar)
-    const id = computed(() => store.state.userState.userInfo.id)
+    const isLogin = computed(() => store.state.isLogin)
+    const userName = computed(() => store.state.userInfo.userName)
+    const avatar = computed(() => store.state.userInfo.avatar)
+    const id = computed(() => store.state.userInfo.id)
     const toLogout = async () => {
       const res = await logout()
       if (res.data.errno === 0) {
-        store.commit('userState/setUserInfo', {})
-        store.commit('userState/changeLogin', false)
+        store.commit('setUserInfo', {})
+        store.commit('changeLogin', false)
         message.success('退出成功')
         router.push('/')
       }

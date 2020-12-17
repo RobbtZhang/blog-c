@@ -133,14 +133,14 @@ export default defineComponent({
     const loading = ref(false)
     const pageIndex = ref(1)
     const pageSize = ref(5)
-    const sign = computed(() => store.state.userState.userInfo.sign)
-    const userName = computed(() => store.state.userState.userInfo.userName)
-    const avatar = computed(() => store.state.userState.userInfo.avatar)
-    const userId: any = computed(() => store.state.userState.userInfo.id)
+    const sign = computed(() => store.state.userInfo.sign)
+    const userName = computed(() => store.state.userInfo.userName)
+    const avatar = computed(() => store.state.userInfo.avatar)
+    const userId: any = computed(() => store.state.userInfo.id)
     const previewVisible = ref(false)
     const bigImg = ref('')
-    const fansCount = computed(() => store.state.userState.userInfo.fansCount)
-    const followerCount = computed(() => store.state.userState.userInfo.followerCount)
+    const fansCount = computed(() => store.state.userInfo.fansCount)
+    const followerCount = computed(() => store.state.userInfo.followerCount)
     const getData = async () => {
       const { data } = await getFollowBlogs({
         userId: userId.value,

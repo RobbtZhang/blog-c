@@ -125,7 +125,7 @@ export default defineComponent({
     const route = useRoute()
     const router = useRouter()
     const listData = ref([])
-    const myId = computed(() => store.state.userState.userInfo.id)
+    const myId = computed(() => store.state.userInfo.id)
     const isDisable = ref(false)
     const isFollow = ref(false)
     // const fansList = ref<any>([])
@@ -160,8 +160,8 @@ export default defineComponent({
     const getMyFollowersCount = async () => {
       const { data } = await getFollower(myId.value)
       if (data.errno === 0) {
-        store.commit('userState/setFollowerList', data.data.userList)
-        store.commit('userState/setFollowerListCount', data.data.count)
+        store.commit('setFollowerList', data.data.userList)
+        store.commit('setFollowerListCount', data.data.count)
       }
     }
     const getFansList = async () => {

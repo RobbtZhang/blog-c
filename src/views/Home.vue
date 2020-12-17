@@ -123,11 +123,11 @@ export default defineComponent({
   setup () {
     const store = useStore()
     const listData = ref([])
-    const isLogin = computed(() => store.state.userState.isLogin)
-    const userName = computed(() => store.state.userState.userInfo.userName)
-    const sign = computed(() => store.state.userState.userInfo.sign)
-    const userId = computed(() => store.state.userState.userInfo.id)
-    const avatar = computed(() => store.state.userState.userInfo.avatar)
+    const isLogin = computed(() => store.state.isLogin)
+    const userName = computed(() => store.state.userInfo.userName)
+    const sign = computed(() => store.state.userInfo.sign)
+    const userId = computed(() => store.state.userInfo.id)
+    const avatar = computed(() => store.state.userInfo.avatar)
     const actions = ref([
       { type: 'StarOutlined', text: '156' },
       { type: 'LikeOutlined', text: '156' },
@@ -140,8 +140,8 @@ export default defineComponent({
     const pageSize = ref(5)
     const previewVisible = ref(false)
     const bigImg = ref('')
-    const fansCount = computed(() => store.state.userState.userInfo.fansCount)
-    const followerCount = computed(() => store.state.userState.userInfo.followerCount)
+    const fansCount = computed(() => store.state.userInfo.fansCount)
+    const followerCount = computed(() => store.state.userInfo.followerCount)
     onMounted(async () => {
       // fansCount.value =
       // followerCount.value =
